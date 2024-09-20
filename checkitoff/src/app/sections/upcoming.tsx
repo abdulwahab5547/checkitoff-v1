@@ -13,15 +13,18 @@ interface Task {
 const Upcoming = forwardRef((_, ref) => {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [isFetching, setIsFetching] = useState(false);
     const taskRefs = useRef<(HTMLInputElement | null)[]>([]);
       const fetchTasks = async () => {
+        setIsFetching(true);
         try {
-            const response = await axios.get('http://localhost:8000/api/upcoming-tasks', {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/upcoming-tasks`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }
             });
-            setTasks(response.data.tasks); // Set fetched tasks
+            setIsFetching(false);
+            setTasks(response.data.tasks); 
         } catch (error) {
             console.error('Error fetching tasks:', error);
         }
@@ -75,7 +78,7 @@ const Upcoming = forwardRef((_, ref) => {
             setIsLoading(true);
             try {
                 const response = await axios.post(
-                    'http://localhost:8000/api/upcoming-tasks',
+                    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/upcoming-tasks`,
                     { tasks: updatedTasks },
                     {
                         headers: {
@@ -143,28 +146,33 @@ const Upcoming = forwardRef((_, ref) => {
                 </div>
                 
                 <div className='mt-8'>
-                    {tasks.map((task, index) => (
-                        <div key={index}>
-                            <TaskCard 
-                            text={task.text}
-                            completed={task.completed}
-                            index={index}
-                            onUpdateTask={(newText, completed) => updateTask(index, newText, completed)}
-                            onDeleteTask={() => deleteTask(index)}
-                            onAddTask={addTask}
-                            onFocusPrevious={() => focusPreviousTask(index)}
-                            onFocusNext={() => focusNextTask(index)}
-                            />
-                        </div>
-                    ))}
+                {isFetching ? (
+                    <p className='text-sm'>Loading...</p>
+                ) : (
+                    <div >
+                        {tasks.map((task, index) => (
+                            <div key={index}>
+                                <TaskCard 
+                                text={task.text}
+                                completed={task.completed}
+                                index={index}
+                                onUpdateTask={(newText, completed) => updateTask(index, newText, completed)}
+                                onDeleteTask={() => deleteTask(index)}
+                                onAddTask={addTask}
+                                onFocusPrevious={() => focusPreviousTask(index)}
+                                onFocusNext={() => focusNextTask(index)}
+                                />
+                            </div>
+                        ))}
 
-                    <div onClick={() => addTask()} className='flex gap-4 items-center py-3 px-3 hover:bg-taskcard w-fit rounded-xl hover:cursor-pointer group'>
-                        <div className='flex justify-center items-center rounded-full w-[25px] h-[25px] group-hover:bg-orange'> 
-                            <i className="fa-solid fa-plus"></i>
+                        <div onClick={() => addTask()} className='flex gap-4 items-center py-3 px-3 hover:bg-taskcard w-fit rounded-xl hover:cursor-pointer group'>
+                            <div className='flex justify-center items-center rounded-full w-[25px] h-[25px] group-hover:bg-orange'> 
+                                <i className="fa-solid fa-plus"></i>
+                            </div>
+                            <p className='group-hover:text-orange'>Add task</p>
                         </div>
-                        <p className='group-hover:text-orange'>Add task</p>
                     </div>
-                    
+                    )}
                 </div>
                 
             </div>

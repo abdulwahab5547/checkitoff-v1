@@ -5,48 +5,45 @@ import axios from 'axios';
 import TaskCard from './taskcard'
 import { debounce } from 'lodash';
 
+interface GoalsRef {
+    refreshGoals: () => void;
+  }
+
 interface Task {
     text: string;
     completed: boolean;
 }
 
-interface TodayRef {
-    refreshToday: () => void;
+interface LongTermGoalsProps {
+    showGoals: boolean;
   }
 
-interface TodayProps {
-    isFocusMode: boolean;
-  }
-
-  const Today = forwardRef<TodayRef, TodayProps>(({ isFocusMode }, ref) => {
+  const LongTermGoals = forwardRef<GoalsRef, LongTermGoalsProps>(({ showGoals }, ref) => {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [isLoading, setIsLoading] = useState(false);
-    const taskRefs = useRef<(HTMLInputElement | null)[]>([]);
     const [isFetching, setIsFetching] = useState(false);
-
-    
-    const fetchTasks = async () => {
+    const taskRefs = useRef<(HTMLInputElement | null)[]>([]);
+      const fetchTasks = async () => {
         setIsFetching(true);
         try {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/today-tasks`, {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/long-term-goals`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }
             });
             setIsFetching(false);
-            setTasks(response.data.tasks); 
+            setTasks(response.data.goals); 
         } catch (error) {
             console.error('Error fetching tasks:', error);
         }
     };
-
     useEffect(() => {
         fetchTasks();
     }, []);
 
-    const refreshToday = () => {   
+    const refreshGoals = () => {
         fetchTasks();
-    };
+      };
     
     const addTask = (index?: number) => {
         const newTask = { text: '', completed: false };
@@ -89,7 +86,7 @@ interface TodayProps {
             setIsLoading(true);
             try {
                 const response = await axios.post(
-                    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/today-tasks`,
+                    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/long-term-goals`,
                     { tasks: updatedTasks },
                     {
                         headers: {
@@ -136,18 +133,20 @@ interface TodayProps {
     };
 
     useImperativeHandle(ref, () => ({
-        refreshToday,
+        refreshGoals,
       }));
 
     return(
-        <div className={`${isFocusMode? 'flex' : 'hidden'} w-[100%] md:w-[50%] pb-10`}>
+        <div className={`${showGoals? 'flex' : 'hidden'} w-[100%] md:w-[50%] pb-10`}>
             <div className='w-[93%] md:w-[80%] m-auto'>
-                <div className='flex justify-between items-center pr-3'>
+                <div className='flex justify-center flex-col items-center pr-3'>
                     <div>
-                        <p className='text-xl md:text-2xl font-bold'>today<span className='text-orange'>.</span></p>
-                        <Image src={Below} alt="" width={100}/>
+                        <p className='text-xl md:text-2xl font-bold'>long-term goals<span className='text-orange'>.</span></p>
+                        <div className='flex justify-center'>
+                            <Image src={Below} alt="" width={130}/>
+                        </div>
                     </div>
-                    <div>
+                    <div className='pt-1'>
                         {isLoading ? (
                             <p className='text-sm'>Saving...</p>
                         ) : showSaved ? (
@@ -156,13 +155,11 @@ interface TodayProps {
                     </div>
                 </div>
                 
-                
-
                 <div className='mt-8'>
                 {isFetching ? (
                     <p className='text-sm'>Loading...</p>
                 ) : (
-                    <div>
+                    <div >
                         {tasks.map((task, index) => (
                             <div key={index}>
                                 <TaskCard 
@@ -182,11 +179,10 @@ interface TodayProps {
                             <div className='flex justify-center items-center rounded-full w-[25px] h-[25px] group-hover:bg-orange'> 
                                 <i className="fa-solid fa-plus"></i>
                             </div>
-                            <p className='group-hover:text-orange'>Add task</p>
+                            <p className='group-hover:text-orange'>Add goal</p>
                         </div>
-                        
                     </div>
-                )}
+                    )}
                 </div>
                 
             </div>
@@ -194,6 +190,6 @@ interface TodayProps {
     )
 });
 
-Today.displayName = "Today";
+LongTermGoals.displayName = "LongTermGoals";
 
-export default Today; 
+export default LongTermGoals; 

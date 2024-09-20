@@ -41,37 +41,40 @@ function AddNote({ isOpen, content, title, onClose, setTitle, setContent, fetchN
         }
       }, [content]);
 
-    const handleSubmit = async (e: FormEvent) => {
+      const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-
+      
         const note: Note = {
-        title,
-        content
+          title,
+          content
         };
-
+      
         try {
-        const response = await axios.post(
-            'http://localhost:8000/api/notes',
+          const response = await axios.post(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/notes`, 
             { notes: [note] },
             {
-            headers: {
+              headers: {
                 Authorization: `Bearer ${localStorage.getItem('authToken')}`
+              }
             }
-            }
-        );
-        console.log('Note saved:', response.data.notes);
-        setTitle('');
-        setContent('');
-        fetchNotes();
-        onClose();
-        toast.success("Note added");
-        } catch (error: any) { 
-        console.error('Error saving note:', error.message);
-        toast.success("Error adding note");
+          );
+          console.log('Note saved:', response.data.notes);
+          setTitle('');
+          setContent('');
+          fetchNotes();
+          onClose();
+          toast.success("Note added");
+        } catch (error: unknown) {
+          if (error instanceof Error) {
+            console.error('Error saving note:', error.message);
+            toast.error(`Error adding note: ${error.message}`);
+          } else {
+            console.error('Unexpected error:', error);
+            toast.error('Unexpected error occurred');
+          }
         }
-
-
-    };
+      };
 
     return (
         <div

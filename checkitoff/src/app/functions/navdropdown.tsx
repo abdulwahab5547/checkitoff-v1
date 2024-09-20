@@ -3,7 +3,15 @@ import { useState, useEffect, useRef } from "react";
 import { useAuth } from '../functions/auth-context';
 import Modal from '../functions/modal';
 
-function NavbarDropdown() {
+interface NavDropdownProps {
+  isFocusMode: boolean;
+  toggleFocusMode: () => void;
+
+  showGoals: boolean;
+  toggleShowGoals: () => void;
+}
+
+const NavbarDropdown: React.FC<NavDropdownProps> = ({ isFocusMode, toggleFocusMode, showGoals, toggleShowGoals }) => {
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -61,9 +69,19 @@ function NavbarDropdown() {
                 <p><i className="text-sm fa-solid fa-note-sticky hover:cursor-pointer"></i></p>
             </a>
           </div>
+
+          <div onClick={toggleFocusMode} className="text-center p-2 mt-3 hover:bg-gray-700 rounded-lg">
+            <p className="m-auto hover:cursor-pointer flex justify-between"><span className='pr-1'>focus</span><span className='md:pl-2'><i className={`fa-solid ${isFocusMode ? 'fa-toggle-off' : 'fa-toggle-on'}`}></i></span></p>
+          </div>
+
+          <div onClick={toggleShowGoals} className="text-center p-2 mt-3 hover:bg-gray-700 rounded-lg">
+            <p className="m-auto hover:cursor-pointer flex justify-between"><span className='pr-1'>goals</span><span className='md:pl-2'><i className={`fa-solid ${showGoals ? 'fa-toggle-off' : 'fa-toggle-on'}`}></i></span></p>
+          </div>
+
           <div onClick={handleLogout} className="text-center p-2 mt-3 hover:bg-gray-700 rounded-lg">
             <p className="m-auto hover:cursor-pointer flex justify-between"><span className='pr-1'>logout</span><span className='md:pl-2'><i className="text-sm fa-solid fa-right-from-bracket"></i></span></p>
           </div>
+          
         </div>
       )}
       <Modal

@@ -10,25 +10,15 @@ interface Task {
     completed: boolean;
 }
 
-interface TodayRef {
-    refreshToday: () => void;
-  }
-
-interface TodayProps {
-    isFocusMode: boolean;
-  }
-
-  const Today = forwardRef<TodayRef, TodayProps>(({ isFocusMode }, ref) => {
+const Weekly = forwardRef((_, ref) => {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [isLoading, setIsLoading] = useState(false);
-    const taskRefs = useRef<(HTMLInputElement | null)[]>([]);
     const [isFetching, setIsFetching] = useState(false);
-
-    
-    const fetchTasks = async () => {
+    const taskRefs = useRef<(HTMLInputElement | null)[]>([]);
+      const fetchTasks = async () => {
         setIsFetching(true);
         try {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/today-tasks`, {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/weekly-tasks`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }
@@ -39,14 +29,13 @@ interface TodayProps {
             console.error('Error fetching tasks:', error);
         }
     };
-
     useEffect(() => {
         fetchTasks();
     }, []);
 
-    const refreshToday = () => {   
+    const refreshWeekly = () => {
         fetchTasks();
-    };
+      };
     
     const addTask = (index?: number) => {
         const newTask = { text: '', completed: false };
@@ -89,7 +78,7 @@ interface TodayProps {
             setIsLoading(true);
             try {
                 const response = await axios.post(
-                    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/today-tasks`,
+                    `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/weekly-tasks`,
                     { tasks: updatedTasks },
                     {
                         headers: {
@@ -136,15 +125,15 @@ interface TodayProps {
     };
 
     useImperativeHandle(ref, () => ({
-        refreshToday,
+        refreshWeekly,
       }));
 
     return(
-        <div className={`${isFocusMode? 'flex' : 'hidden'} w-[100%] md:w-[50%] pb-10`}>
+        <div className='flex w-[100%] md:w-[50%] pb-10'>
             <div className='w-[93%] md:w-[80%] m-auto'>
                 <div className='flex justify-between items-center pr-3'>
                     <div>
-                        <p className='text-xl md:text-2xl font-bold'>today<span className='text-orange'>.</span></p>
+                        <p className='text-xl md:text-2xl font-bold'>weekly<span className='text-orange'>.</span></p>
                         <Image src={Below} alt="" width={100}/>
                     </div>
                     <div>
@@ -156,13 +145,11 @@ interface TodayProps {
                     </div>
                 </div>
                 
-                
-
                 <div className='mt-8'>
                 {isFetching ? (
                     <p className='text-sm'>Loading...</p>
                 ) : (
-                    <div>
+                    <div >
                         {tasks.map((task, index) => (
                             <div key={index}>
                                 <TaskCard 
@@ -184,9 +171,8 @@ interface TodayProps {
                             </div>
                             <p className='group-hover:text-orange'>Add task</p>
                         </div>
-                        
                     </div>
-                )}
+                    )}
                 </div>
                 
             </div>
@@ -194,6 +180,6 @@ interface TodayProps {
     )
 });
 
-Today.displayName = "Today";
+Weekly.displayName = "Weekly";
 
-export default Today; 
+export default Weekly; 

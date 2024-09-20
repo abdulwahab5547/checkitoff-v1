@@ -32,7 +32,7 @@ function NoteView({ isOpen, title, content, onClose, fetchNotes }: NoteViewProps
   const handleUpdateNote = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/notes/${title}`, 
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/notes/${title}`,
         {
           title: editedTitle,
           content: editedContent,

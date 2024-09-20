@@ -8,7 +8,13 @@ import NavbarDropdown from '../functions/navdropdown'
 
 interface NavbarProps {
     refresh?: () => void;
-  }
+    isFocusMode: boolean;
+    toggleFocusMode: () => void;
+
+    showGoals: boolean; 
+    toggleShowGoals: () => void;
+    
+}
 
   const useCurrentPathname = () => {
     const [pathname, setPathname] = useState('');
@@ -36,7 +42,7 @@ interface NavbarProps {
     return pathname;
   };
 
-const Navbar: React.FC<NavbarProps> = ({ refresh }) => {
+const Navbar: React.FC<NavbarProps> = ({ refresh, isFocusMode, toggleFocusMode, showGoals, toggleShowGoals }) => {
 
     const pathname = useCurrentPathname();
     const showRefreshButton = pathname === '/';
@@ -93,7 +99,7 @@ const Navbar: React.FC<NavbarProps> = ({ refresh }) => {
                     </div>
                     )}
                     
-                    <NavbarDropdown/>
+                    <NavbarDropdown isFocusMode={isFocusMode} toggleFocusMode={toggleFocusMode} showGoals={showGoals} toggleShowGoals={toggleShowGoals}/>
                     
                 </div>
             </div>

@@ -25,7 +25,7 @@ function Register(){
     const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8000/api/signup', formData);
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/signup`, formData);
             toast.success('Account created!');
             console.log('User created:', response.data);
             setTimeout(() => {

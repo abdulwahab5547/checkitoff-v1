@@ -1,6 +1,6 @@
 "use client"
 
-import {useState, useEffect, FormEvent} from 'react';
+import {useState, useEffect} from 'react';
 import axios from 'axios';
 import Navbar from "../sections/navbar";
 import Below from "../../assets/text-below.svg";
@@ -50,7 +50,7 @@ function Notes(){
     const fetchNotes = async () => {
         setIsLoading(true)
         try {
-            const response = await axios.get('http://localhost:8000/api/notes', {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/notes`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }
@@ -125,6 +125,8 @@ function Notes(){
                         </div>
                     </div>
                 )}
+
+                <p className='hidden'>{selectedNoteId}</p>
 
                 <NoteView
                     isOpen={isNoteViewOpen}
