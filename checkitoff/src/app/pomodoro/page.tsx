@@ -51,7 +51,11 @@ function Pomodoro() {
 
     return (
         <div>
-            <Navbar />
+            <Navbar isFocusMode={false} toggleFocusMode={function (): void {
+                throw new Error("Function not implemented.");
+            } } showGoals={false} toggleShowGoals={function (): void {
+                throw new Error("Function not implemented.");
+            } } />
             <div className="w-[90%] m-auto pt-10 md:pt-20">
                 <div className="flex flex-col items-center">
                     <p className="text-xl md:text-2xl font-bold">

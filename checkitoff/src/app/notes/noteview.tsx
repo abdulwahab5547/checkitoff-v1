@@ -14,21 +14,21 @@ function NoteView({ isOpen, title, content, onClose, fetchNotes }: NoteViewProps
   const [editedContent, setEditedContent] = useState(content);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
-    useEffect(() => {
-        const handleEscape = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') {
-                onClose();
-            }
-        };
-        window.addEventListener('keydown', handleEscape);
-        return () => window.removeEventListener('keydown', handleEscape);
-    }, [onClose]);
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [onClose]);
 
-      useEffect(() => {
-        setEditedTitle(title);
-        setEditedContent(content);
-      }, [title, content]);
-  
+  useEffect(() => {
+    setEditedTitle(title);
+    setEditedContent(content);
+  }, [title, content]);
+
   const handleUpdateNote = async () => {
     try {
       const response = await axios.put(
@@ -72,43 +72,40 @@ function NoteView({ isOpen, title, content, onClose, fetchNotes }: NoteViewProps
         >
           &times;
         </button>
-        
+
 
         <div>
+          <div>
+            <input
+              type="text"
+              id="title"
+              value={editedTitle}
+              onChange={(e) => setEditedTitle(e.target.value)}
+              required
+              className="text-xl font-bold mb-4 bg-inherit w-full focus:outline-none"
+            />
+          </div>
 
-        
+          <div className='h-64 max-h-96'>
+            <textarea
+              id="content"
+              ref={textareaRef}
+              value={editedContent}
+              onChange={(e) => setEditedContent(e.target.value)}
+              required
+              placeholder="add note..."
+              className='bg-inherit w-full h-full resize-none focus:outline-none'
+            />
+          </div>
 
-        <div>
-                <input
-                    type="text"
-                    id="title"
-                    value={editedTitle}
-                    onChange={(e) => setEditedTitle(e.target.value)}
-                    required
-                    className="text-xl font-bold mb-4 bg-inherit w-full focus:outline-none"
-                />
-                </div>
-
-                <div className='h-64 max-h-96'>
-                    <textarea
-                        id="content"
-                        ref={textareaRef}
-                        value={editedContent}
-                        onChange={(e) => setEditedContent(e.target.value)}
-                        required
-                        placeholder="add note..."
-                        className='bg-inherit w-full h-full resize-none focus:outline-none'
-                    />
-                </div>
-
-                <div>
-                    <button
-                    onClick={handleUpdateNote}
-                    className="bg-dark border-2 border-cardborder py-2 px-3 rounded-xl mt-4"
-                    >
-                    Save
-                    </button>
-                </div>
+          <div>
+            <button
+              onClick={handleUpdateNote}
+              className="bg-dark border-2 border-cardborder py-2 px-3 rounded-xl mt-4"
+            >
+              Save
+            </button>
+          </div>
         </div>
       </div>
     </div>

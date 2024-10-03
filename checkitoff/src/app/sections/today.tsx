@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { useImperativeHandle, forwardRef, useState, useEffect, useRef, useCallback} from 'react';
 import axios from 'axios';
 import TaskCard from './taskcard'
+import TaskCardSkeleton from './taskskeleton'
 import { debounce } from 'lodash';
 
 interface Task {
@@ -105,6 +106,7 @@ interface TodayProps {
         }, 1000),
         []
     );
+    
 
     const [showSaved, setShowSaved] = useState(false);
     useEffect(() => {
@@ -160,7 +162,11 @@ interface TodayProps {
 
                 <div className='mt-8'>
                 {isFetching ? (
-                    <p className='text-sm'>Loading...</p>
+                    <>
+                        <TaskCardSkeleton />
+                        <TaskCardSkeleton />
+                        <TaskCardSkeleton />
+                    </>
                 ) : (
                     <div>
                         {tasks.map((task, index) => (

@@ -4,6 +4,7 @@ import { useImperativeHandle, forwardRef, useState, useEffect, useRef, useCallba
 import axios from 'axios';
 import TaskCard from './taskcard'
 import { debounce } from 'lodash';
+import TaskCardSkeleton from './taskskeleton'
 
 interface GoalsRef {
     refreshGoals: () => void;
@@ -157,7 +158,11 @@ interface LongTermGoalsProps {
                 
                 <div className='mt-8'>
                 {isFetching ? (
-                    <p className='text-sm'>Loading...</p>
+                    <>
+                        <TaskCardSkeleton />
+                        <TaskCardSkeleton />
+                        <TaskCardSkeleton />
+                    </>
                 ) : (
                     <div >
                         {tasks.map((task, index) => (

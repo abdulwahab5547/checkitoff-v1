@@ -71,7 +71,7 @@ function Notes(){
 
     const handleDeleteNote = async (title: string) => {
         try {
-            await axios.delete(`http://localhost:8000/api/notes/${title}`, {
+            await axios.delete(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/notes/${title}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('authToken')}`
                 }
@@ -90,7 +90,11 @@ function Notes(){
 
     return(
         <div>
-            <Navbar/>
+            <Navbar isFocusMode={false} toggleFocusMode={function (): void {
+                throw new Error('Function not implemented.');
+            } } showGoals={false} toggleShowGoals={function (): void {
+                throw new Error('Function not implemented.');
+            } }/>
             <div className="md:pt-12 pt-8 w-[95%] md:w-[88%] m-auto">
 
                 <div className="flex flex-col items-center">

@@ -75,13 +75,12 @@ const NavbarDropdown: React.FC<NavDropdownProps> = ({ isFocusMode, toggleFocusMo
           </div>
 
           <div onClick={toggleShowGoals} className="text-center p-2 mt-3 hover:bg-gray-700 rounded-lg">
-            <p className="m-auto hover:cursor-pointer flex justify-between"><span className='pr-1'>goals</span><span className='md:pl-2'><i className={`fa-solid ${showGoals ? 'fa-toggle-off' : 'fa-toggle-on'}`}></i></span></p>
+            <p className="m-auto hover:cursor-pointer flex justify-between"><span className='pr-1'>goals</span><span className='md:pl-2'><i className={`fa-solid ${showGoals ? 'fa-toggle-on' : 'fa-toggle-off'}`}></i></span></p>
           </div>
 
           <div onClick={handleLogout} className="text-center p-2 mt-3 hover:bg-gray-700 rounded-lg">
             <p className="m-auto hover:cursor-pointer flex justify-between"><span className='pr-1'>logout</span><span className='md:pl-2'><i className="text-sm fa-solid fa-right-from-bracket"></i></span></p>
           </div>
-          
         </div>
       )}
       <Modal

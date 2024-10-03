@@ -17,7 +17,7 @@ function Settings() {
     useEffect(() => {
         const fetchAccountSettings = async () => {
             try {
-                const response = await fetch('http://localhost:8000/api/account-settings', {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/account-settings`, {
                     method: 'GET',
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('authToken')}`, // Assuming token is stored in localStorage
@@ -50,7 +50,7 @@ function Settings() {
         e.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:8000/api/account-settings', {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/account-settings`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -72,7 +72,11 @@ function Settings() {
 
     return (
         <div>
-            <Navbar />
+            <Navbar isFocusMode={false} toggleFocusMode={function (): void {
+                throw new Error("Function not implemented.");
+            } } showGoals={false} toggleShowGoals={function (): void {
+                throw new Error("Function not implemented.");
+            } } />
             <div className="w-[95%] m-auto pt-20">
                 <div className="w-64 md:w-96 m-auto">
                     <div className="pb-5 flex justify-center">
