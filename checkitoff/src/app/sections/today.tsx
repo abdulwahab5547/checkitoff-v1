@@ -63,6 +63,7 @@ interface TodayProps {
         setTimeout(() => {
             if (taskRefs.current[updatedTasks.length - 1]) {
                 taskRefs.current[updatedTasks.length - 1]?.focus();
+                taskRefs.current[updatedTasks.length - 1]?.setSelectionRange(0, 0); // Move cursor to the beginning of the new task
             }
         }, 0);
     };
@@ -125,6 +126,7 @@ interface TodayProps {
     const focusPreviousTask = (index: number) => {
         if (index > 0 && taskRefs.current[index - 1]) {
             taskRefs.current[index + 1]?.focus();
+            taskRefs.current[index + 1]?.setSelectionRange(0, 0); // Move cursor to the beginning of the previous task
         }
     };
 
@@ -133,6 +135,7 @@ interface TodayProps {
             const nextIndex = index + 1;
             if (taskRefs.current[nextIndex]) {
                 taskRefs.current[nextIndex]?.focus();
+                taskRefs.current[nextIndex]?.setSelectionRange(0, 0); // Move cursor to the beginning of the next task
             }
         }
     };

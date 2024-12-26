@@ -57,7 +57,7 @@ const NavbarDropdown: React.FC<NavDropdownProps> = ({ isFocusMode, toggleFocusMo
       </button>
 
       {dropdownOpen && (
-        <div className="absolute right-0 mt-2 w-32 bg-lessDark rounded-lg bs p-4">
+        <div className="absolute right-0 mt-2 w-32 bg-lessDark rounded-lg bs p-4 z-50">
           <div className="grid grid-cols-2 gap-4">
             <a href='/pomodoro' className="flex items-center justify-center p-2 hover:bg-gray-700 rounded-lg">
                 <i className="text-sm fa-solid fa-clock hover:cursor-pointer"></i>
